@@ -16,6 +16,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log("Touched");
         if (hasBeenPlayed == false) {
             transform.position += Vector3.up * 5;
             hasBeenPlayed = true;
@@ -28,6 +29,5 @@ public class Card : MonoBehaviour
         cm.discardPile.Add(this);
         gameObject.SetActive(false);
         cm.discardSizeText.text = cm.discardPile.Count.ToString(); //Update discard pile size text
-
     }
 }

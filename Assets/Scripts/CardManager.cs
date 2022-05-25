@@ -27,10 +27,11 @@ public class CardManager : MonoBehaviour
                     randCard.transform.position = cardSlots[i].position;
                     availableCardSlots[i] = false;
                     deck.Remove(randCard);
+                    deckSizeText.text = deck.Count.ToString(); //Update deck size text
+                    return;
                 }
             }
         }
-        deckSizeText.text = deck.Count.ToString(); //Update deck size text
     }
     private void Start()
     {
