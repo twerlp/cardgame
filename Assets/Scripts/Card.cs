@@ -14,7 +14,7 @@ public class Card : MonoBehaviour
         cm = FindObjectOfType<CardManager>();
     }
 
-    private void OnMouseDown()
+    public void Clicked()
     {
         Debug.Log("Touched");
         if (hasBeenPlayed == false) {
