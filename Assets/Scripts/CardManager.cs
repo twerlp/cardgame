@@ -5,19 +5,19 @@ using TMPro;
 
 public class CardManager : MonoBehaviour
 {
-    public List<Card> deck = new List<Card>();
-    public List<Card> discardPile = new List<Card>();
+    public List<Card> deck = new List<Card>();          // List for deck
+    public List<Card> discardPile = new List<Card>();   // List for discard
 
-    public Transform[] cardSlots;
-    public bool[] availableCardSlots;
+    public Transform[] cardSlots;                       // For placing cards neatly in hand
+    public bool[] availableCardSlots;                   // Checking if there are any slots left in the hand
 
-    public TMP_Text deckSizeText;
-    public TMP_Text discardSizeText;
+    public TMP_Text deckSizeText;                       // User feedback, lets them know how many cards left in deck
+    public TMP_Text discardSizeText;                    // User feedback, lets them know how many cards left in discard
 
-    //Draw a card
+    //Draw a card and remove it from deck.
     public void DrawCard() {
         if (deck.Count >= 1) {
-            Card randCard = deck[Random.Range(0, deck.Count)];
+            Card randCard = deck[Random.Range(0, deck.Count)];      // Draws a random card, could change to just first card. (Shuffle first.)
 
             for (int i = 0; i < availableCardSlots.Length; i++) {
                 if (availableCardSlots[i] == true) {
