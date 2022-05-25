@@ -10,5 +10,5 @@ public class CardData : MonoBehaviour
     public int movement;    //
     public int health;      //
 
-    public List<CardEffect> cardEffects = new List<CardEffect>;
+    public List<CardEffect> cardEffects = new List<CardEffect>();
 }
