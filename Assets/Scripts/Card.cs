@@ -1,22 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Card : MonoBehaviour
 {
-    public bool hasBeenPlayed;
-    public int handIndex;
+    public bool hasBeenPlayed;          // Check if card has been played
+    public int handIndex;               // Where card is in hand
 
-    private CardManager cm;
+                                        // For visuals on Card
+    public TMP_Text strengthTMP;        //
+    public TMP_Text aoeTMP;             //
+    public TMP_Text movementTMP;        //
+    public TMP_Text healthTMP;          //
+    public TMP_Text descriptTMP;        //
+
+    public Transform[] effectSlots;     // Used for placing the effects in a nice order
+
+
+    private CardManager cm;             // The CardManager for the arena
+    public CardData cardData;           // Helps display all card-specific data / give cards functionality
 
     private void Start()
     {
         cm = FindObjectOfType<CardManager>();
     }
 
-    public void Clicked()
+    public void Clicked() //replace this area with new logic for clicking
     {
-        Debug.Log("Touched");
         if (hasBeenPlayed == false) {
             transform.position += Vector3.up * 5;
             hasBeenPlayed = true;
@@ -25,9 +36,15 @@ public class Card : MonoBehaviour
         }
     }
 
+    public void Play() { // Flesh out with playing logic
+    
+    }
+
+    // Move the Card to the discard pile after playing it.
     void MoveToDiscardPile() {
         cm.discardPile.Add(this);
         gameObject.SetActive(false);
-        cm.discardSizeText.text = cm.discardPile.Count.ToString(); //Update discard pile size text
+        cm.discardSizeText.text = cm.discardPile.Count.ToString(); // Update discard pile size text
     }
+
 }
