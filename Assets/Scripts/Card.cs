@@ -15,15 +15,31 @@ public class Card : MonoBehaviour
     public TMP_Text healthTMP;          //
     public TMP_Text descriptTMP;        //
 
-    public Transform[] effectSlots;     // Used for placing the effects in a nice order
-
+    public GameObject strengthIcon;
+    public GameObject aoeIcon;
+    public GameObject movementIcon;
+    public GameObject healthIcon;
+    public GameObject background;
 
     private CardManager cm;             // The CardManager for the arena
     public CardData cardData;           // Helps display all card-specific data / give cards functionality
 
+
     private void Start()
     {
         cm = FindObjectOfType<CardManager>();
+    }
+
+    public void UpdateText() { // Used to update all the text information on the card (UPDATE TO REMOVE / ADD ICONS DEPENDING ON IF THERE IS A STAT OR NOT!)
+        strengthTMP.text = cardData.strength.ToString();
+        aoeTMP.text = cardData.aoe.ToString();
+        movementTMP.text = cardData.movement.ToString();
+        healthTMP.text = cardData.health.ToString();
+
+        if (cardData.cardEffects.Count > 0) descriptTMP.text = "";
+        foreach (CardEffect effect in cardData.cardEffects)
+            descriptTMP.text = effect.CardDescription() + "\n" + descriptTMP.text;
+
     }
 
     public void Clicked() //replace this area with new logic for clicking

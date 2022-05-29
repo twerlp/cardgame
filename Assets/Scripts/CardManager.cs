@@ -33,7 +33,9 @@ public class CardManager : MonoBehaviour
 
                     availableCardSlots[i] = false;
                     deck.Remove(topCard);
+                    
                     deckSizeText.text = deck.Count.ToString(); //Update deck size text
+                    topCard.UpdateText();
                     return;
                 }
             }
