@@ -6,7 +6,10 @@ using TMPro;
 public class CardManager : MonoBehaviour
 {
     public List<Card> deck = new List<Card>();          // List for deck
+    public List<Card> hand = new List<Card>();          // List for hand
     public List<Card> discardPile = new List<Card>();   // List for discard
+
+    public int inititalDrawNumber;                      // Number of cards the player starts with
 
     public Transform[] cardSlots;                       // For placing cards neatly in hand
     public bool[] availableCardSlots;                   // Checking if there are any slots left in the hand
@@ -29,11 +32,12 @@ public class CardManager : MonoBehaviour
                     topCard.handIndex = i;
 
                     topCard.transform.position = cardSlots[i].position;
-                    topCard.hasBeenPlayed = false;
+                    topCard.hasBeenClicked = false;
 
                     availableCardSlots[i] = false;
                     deck.Remove(topCard);
-                    
+                    hand.Add(topCard);
+
                     deckSizeText.text = deck.Count.ToString(); //Update deck size text
                     topCard.UpdateText();
                     return;
@@ -44,6 +48,16 @@ public class CardManager : MonoBehaviour
         {
             DiscardtoDeck();
             ShuffleDeck();
+        }
+    }
+
+    public void PlayCards() {
+        for (int i = 0; i < cardSlots.Length; i++)
+        {
+            if (hand[i].hasBeenClicked == true)
+            {
+                hand[i].Play();
+            }
         }
     }
 
@@ -74,6 +88,7 @@ public class CardManager : MonoBehaviour
                 deck.Add(card);
             }
         }
+        discardPile.Clear();
     }
 
     private void Start()
@@ -81,5 +96,15 @@ public class CardManager : MonoBehaviour
         deckSizeText.text = deck.Count.ToString(); //Update deck size text
         discardSizeText.text = discardPile.Count.ToString(); //Update discard pile size text
         ShuffleDeck();
+
+        for (int i = 0; i < availableCardSlots.Length; i++) // Set all spots to be available
+        {
+            availableCardSlots[i] = true;
+        }
+
+        for (int i = 0; i < inititalDrawNumber; i++) // Draw the number of cards necessary to start
+        {
+            DrawCard();
+        }
     }
 }

@@ -5,7 +5,7 @@ using TMPro;
 
 public class Card : MonoBehaviour
 {
-    public bool hasBeenPlayed;          // Check if card has been played
+    public bool hasBeenClicked;         // Check if card is ready to be played
     public int handIndex;               // Where card is in hand
 
                                         // For visuals on Card
@@ -44,21 +44,27 @@ public class Card : MonoBehaviour
 
     public void Clicked() //replace this area with new logic for clicking
     {
-        if (hasBeenPlayed == false) {
-            transform.position += Vector3.up * 5;
-            hasBeenPlayed = true;
-            cm.availableCardSlots[handIndex] = true;
-            Invoke("MoveToDiscardPile", 2f); // Discard card after 2 seconds NOTE: We will change this to be done after a button press in the future
+        if (hasBeenClicked == false) {
+            hasBeenClicked = true;
+            transform.position += Vector3.up * 2;
+        }
+        else if (hasBeenClicked == true) {
+            hasBeenClicked = false;
+            transform.position -= Vector3.up * 2;
         }
     }
 
     public void Play() { // Flesh out with playing logic
-    
+        cm.availableCardSlots[handIndex] = true;
+        foreach (CardEffect effect in cardData.cardEffects)
+            effect.ApplyEffect();
+        Invoke("MoveToDiscardPile", 2f); // Discard card after 2 seconds NOTE: We will change this to be done after a button press in the future
     }
 
     // Move the Card to the discard pile after playing it.
     void MoveToDiscardPile() {
         cm.discardPile.Add(this);
+        cm.hand.Remove(this);
         gameObject.SetActive(false);
         cm.discardSizeText.text = cm.discardPile.Count.ToString(); // Update discard pile size text
     }

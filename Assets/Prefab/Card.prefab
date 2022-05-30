@@ -484,7 +484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d8ee7053fe05742800ad5bd37d019c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasBeenPlayed: 0
+  hasBeenClicked: 0
   handIndex: 0
   strengthTMP: {fileID: 2270533196501795174}
   aoeTMP: {fileID: 6616966438949676653}
@@ -496,7 +496,7 @@ MonoBehaviour:
   movementIcon: {fileID: 1039681970626411611}
   healthIcon: {fileID: 2894476125478235874}
   background: {fileID: 6361576307744087579}
-  cardData: {fileID: 0}
+  cardData: {fileID: 2241309015847080553, guid: d1f3daf322cebc442896708f6c588c85, type: 3}
 --- !u!61 &-1052122067429645672
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -544,7 +544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 4
+  - eventID: 3
     callback:
       m_PersistentCalls:
         m_Calls:

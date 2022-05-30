@@ -10,7 +10,9 @@ public class Draw : CardEffect
     {
         cm = FindObjectOfType<CardManager>();
         for (int i = 0; i < num; i++)
+        {
             cm.DrawCard();
+        }
     }
 
     public override string CardDescription()
