@@ -6,7 +6,7 @@ using TMPro;
 public class CardManager : MonoBehaviour
 {
     public List<Card> deck = new List<Card>();          // List for deck
-    public List<Card> hand = new List<Card>();          // List for hand
+    public List<Card> activeCard = new List<Card>();    // List for active cards
     public List<Card> discardPile = new List<Card>();   // List for discard
 
     public int inititalDrawNumber;                      // Number of cards the player starts with
@@ -36,9 +36,8 @@ public class CardManager : MonoBehaviour
 
                     availableCardSlots[i] = false;
                     deck.Remove(topCard);
-                    hand.Add(topCard);
 
-                    deckSizeText.text = deck.Count.ToString(); //Update deck size text
+                    UpdateUI();
                     topCard.UpdateText();
                     return;
                 }
@@ -48,15 +47,17 @@ public class CardManager : MonoBehaviour
         {
             DiscardtoDeck();
             ShuffleDeck();
+            DrawCard();
         }
     }
 
+    // Play each card that was selected
     public void PlayCards() {
-        for (int i = 0; i < cardSlots.Length; i++)
+        for (int i = 0; i < activeCard.Count; i++)
         {
-            if (hand[i].hasBeenClicked == true)
+            if (activeCard[i].hasBeenClicked == true)
             {
-                hand[i].Play();
+                activeCard[i].Play();
             }
         }
     }
@@ -87,14 +88,13 @@ public class CardManager : MonoBehaviour
             {
                 deck.Add(card);
             }
+            discardPile.Clear();
         }
-        discardPile.Clear();
     }
 
     private void Start()
     {
-        deckSizeText.text = deck.Count.ToString(); //Update deck size text
-        discardSizeText.text = discardPile.Count.ToString(); //Update discard pile size text
+        UpdateUI();
         ShuffleDeck();
 
         for (int i = 0; i < availableCardSlots.Length; i++) // Set all spots to be available
@@ -106,5 +106,10 @@ public class CardManager : MonoBehaviour
         {
             DrawCard();
         }
+    }
+
+    public void UpdateUI() {
+        deckSizeText.text = deck.Count.ToString(); //Update deck size text
+        discardSizeText.text = discardPile.Count.ToString(); //Update discard pile size text
     }
 }

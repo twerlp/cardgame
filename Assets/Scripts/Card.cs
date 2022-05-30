@@ -47,26 +47,28 @@ public class Card : MonoBehaviour
         if (hasBeenClicked == false) {
             hasBeenClicked = true;
             transform.position += Vector3.up * 2;
+            cm.activeCard.Add(this);
         }
         else if (hasBeenClicked == true) {
             hasBeenClicked = false;
             transform.position -= Vector3.up * 2;
+            cm.activeCard.Remove(this);
         }
     }
 
     public void Play() { // Flesh out with playing logic
         cm.availableCardSlots[handIndex] = true;
+        Invoke("MoveToDiscardPile", 2f); // Discard card after 2 seconds NOTE: We will change this to be done after a button press in the future
         foreach (CardEffect effect in cardData.cardEffects)
             effect.ApplyEffect();
-        Invoke("MoveToDiscardPile", 2f); // Discard card after 2 seconds NOTE: We will change this to be done after a button press in the future
     }
 
     // Move the Card to the discard pile after playing it.
     void MoveToDiscardPile() {
         cm.discardPile.Add(this);
-        cm.hand.Remove(this);
+        cm.activeCard.Remove(this);
         gameObject.SetActive(false);
-        cm.discardSizeText.text = cm.discardPile.Count.ToString(); // Update discard pile size text
+        cm.UpdateUI();
     }
 
 }
