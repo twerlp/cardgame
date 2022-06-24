@@ -42,7 +42,7 @@ public class Card : MonoBehaviour
 
     }
 
-    public void Clicked() //replace this area with new logic for clicking
+    public void Clicked() // When the player clicks the card (active / inactive)
     {
         if (hasBeenClicked == false) {
             hasBeenClicked = true;
@@ -56,7 +56,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void Play() { // Flesh out with playing logic
+    public void Play() { // Plays the card, provides effects.
         cm.availableCardSlots[handIndex] = true;
         Invoke("MoveToDiscardPile", 2f); // Discard card after 2 seconds NOTE: We will change this to be done after a button press in the future
         foreach (CardEffect effect in cardData.cardEffects)
