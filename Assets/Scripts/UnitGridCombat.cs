@@ -30,15 +30,18 @@ public class UnitGridCombat : MonoBehaviour
 
     private void Start()
     {
+        validNodes = new List<ValidNode>();
+
         movePosition = GetComponent<MovePositionPathfinding>();
         pathfinding = ArenaHandler.Instance.pathfinding;
+        UpdatePosition();
         //SetSelectedVisible(false);
         state = State.Normal;
     }
 
     private void Update()
     {
-        switch (state)
+        switch (state) // Use for animations
         {
             case State.Normal:
                 break;
@@ -48,16 +51,24 @@ public class UnitGridCombat : MonoBehaviour
                 break;
         }
     }
-    public void MoveTo(Vector3 targetPosition, Action onReachedPosition)
+    public void MoveTo(Vector3 targetPosition, Action onReachedPosition) // Move the player
     {
         state = State.Moving;
+        UpdatePosition();
         movePosition.SetMovePosition(targetPosition + new Vector3(1, 1), () => {
             state = State.Normal;
+            UpdatePosition();
             onReachedPosition();
         });
+        
     }
 
-    public bool CanMoveTile(PathNode selected) 
+    public void MoveTo(PathNode targetNode, Action onReachedPosition) 
+    {
+        MoveTo(pathfinding.GetGrid().GetWorldPosition(targetNode.x, targetNode.y), onReachedPosition);
+    }
+
+    public bool CanMoveTile(PathNode selected) // Check if a node is inside the player's valid movement zone
     {
         foreach (ValidNode valid in validNodes) {
             if (valid.node.Equals(selected)) return true;
@@ -65,7 +76,7 @@ public class UnitGridCombat : MonoBehaviour
         return false;
     }
 
-    public bool CanAttackUnit(UnitGridCombat unitGridCombat)
+    public bool CanAttackUnit(UnitGridCombat unitGridCombat) // Check if a node is inside the player's valid attack zone
     {
         return Vector3.Distance(GetPosition(), unitGridCombat.GetPosition()) < 50f;
     }
@@ -143,13 +154,32 @@ public class UnitGridCombat : MonoBehaviour
         return healthSystem.IsDead();
     }
     */
-    public void UpdateValidity(int range)
+    public void UpdateValidity(int range) // Get list of nodes that aren't walls / players in a range
     {
         validNodes.Clear();
+        Debug.Log("Player can move: "+range);
         List<PathNode> validList = pathfinding.GetValidNodes(transform.position, range);
 
         foreach (PathNode node in validList) {
+            Debug.Log(node);
             validNodes.Add(new ValidNode(node,node.distanceCost));
+        }
+    }
+
+    public void UpdatePosition() 
+    {
+        PathNode node = pathfinding.GetNode(transform.position); // Node coresponding to player's location
+
+        if (state == State.Moving) // If the player is going to move, then we need to change their location
+        {
+            node.SetUnitGridCombat(null);
+            node.SetIsWalkable(true);
+
+        }
+        else // If the player isn't moving / has finished moving, then set this as this location
+        {
+            node.SetUnitGridCombat(this);
+            node.SetIsWalkable(false);
         }
     }
 

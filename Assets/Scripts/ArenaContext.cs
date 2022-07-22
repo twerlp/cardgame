@@ -14,21 +14,21 @@ public class ArenaContext : MonoBehaviour
     public void AttackButton() 
     {
         ArenaHandler.Instance.selectState = ArenaHandler.SelectState.Attack;
-        Destroy(this);
+        ArenaHandler.Instance.DestroyContextMenu();
     }
     public void MoveButton()
     {
         ArenaHandler.Instance.selectState = ArenaHandler.SelectState.Movement;
-        Destroy(this);
+        ArenaHandler.Instance.DestroyContextMenu();
     }
     public void AOEButton()
     {
         ArenaHandler.Instance.selectState = ArenaHandler.SelectState.AOE;
-        Destroy(this);
+        ArenaHandler.Instance.DestroyContextMenu();
     }
     public void HealButton()
     {
         ArenaHandler.Instance.selectState = ArenaHandler.SelectState.Health;
-        Destroy(this);
+        ArenaHandler.Instance.DestroyContextMenu();
     }
 }

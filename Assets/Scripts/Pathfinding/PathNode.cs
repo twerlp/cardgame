@@ -11,7 +11,6 @@ public class PathNode {
     public int gCost; // A* Pathfinding
     public int hCost; // A* Pathfinding
     public int fCost; // A* Pathfinding
-    public int movementCost; // Breadth First Search
     public int distanceCost; // Breadth First Search
 
     public bool isWalkable;

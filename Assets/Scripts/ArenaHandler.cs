@@ -10,7 +10,10 @@ public class ArenaHandler : MonoBehaviour
 
     public Pathfinding pathfinding;
     private Grid<PathNode> grid;
+    
     public Tilemap obstacleMap;
+    public GameObject ArenaContextMenu;
+    private GameObject prevMenu = null;
 
     public int mapWidth;
     public int mapHeight;
@@ -83,6 +86,23 @@ public class ArenaHandler : MonoBehaviour
             interactiveMap.SetTile(mousePos, hoverTile);
             previousMousePos = mousePos;
         }
+    }
+
+    public void SpawnContextMenu(Vector3 worldPosition) // Might make more complex, depending on where the camera is
+    {
+        if (prevMenu != null) DestroyContextMenu();
+        prevMenu = Instantiate(ArenaContextMenu, new Vector3 (worldPosition.x + 0.1f, worldPosition.y, 0), Quaternion.identity, GameObject.Find("Canvas").transform); // Adding 5 to x as a base, just moving it over to the side for visibility
+    }
+
+    public void SpawnContextMenu(PathNode node) 
+    {
+        SpawnContextMenu(grid.GetWorldPosition(node.x, node.y));
+    }
+
+    public void DestroyContextMenu()    // Separate in case I need to add something to this, visually.
+    {
+        Destroy(prevMenu);
+        prevMenu = null;
     }
 
     public class EmptyGridObject

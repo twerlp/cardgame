@@ -42,28 +42,23 @@ public class Pathfinding {
 
         // Begin loop, starting with start node, which has lowest values. https://en.wikipedia.org/wiki/Breadth-first_search
         grid.GetGridObject(startX, startY).distanceCost = 0;
+        exploredTiles.Add(grid.GetGridObject(startX, startY));
+
         Queue<PathNode> queue = new Queue<PathNode>();
         queue.Enqueue(grid.GetGridObject(startX, startY));
-        while (queue.Count > 0)
+
+        for (int dist = 0; queue.Count > 0; dist++)
         {
             PathNode current = queue.Dequeue();
-            exploredTiles.Add(current);
             foreach (PathNode neighbour in GetNeighbourList(current)) // Check all of current node's neighbors.
             {
-                if (neighbour.isWalkable && !exploredTiles.Contains(neighbour)) {
-                    if (neighbour.distanceCost > range)
-                    {
-                        int movementCost = neighbour.movementCost;
-                        neighbour.distanceCost = movementCost + current.distanceCost;
-                        if (neighbour.distanceCost <= range) // Judge if node shall be placed under our scrutiny
-                        {
-                            queue.Enqueue(neighbour); // Node shall be scrutinized
-                        }
-                    }
+                neighbour.distanceCost = dist;
+                if (neighbour.isWalkable && neighbour.distanceCost <= range && !exploredTiles.Contains(neighbour)) {
+                        exploredTiles.Add(neighbour);
+                        queue.Enqueue(neighbour); // Node shall be scrutinized
                 }
-                
             }
-            if (current.distanceCost > 0 && current.distanceCost <= range)
+            if (current.distanceCost > 0)
             {
                 // This node is valid!
                 validTiles.Add(current);
@@ -180,6 +175,11 @@ public class Pathfinding {
 
     public PathNode GetNode(int x, int y) {
         return grid.GetGridObject(x, y);
+    }
+
+    public PathNode GetNode(Vector3 worldPosition) {
+        grid.GetXY(worldPosition, out int x, out int y);
+        return GetNode(x, y);
     }
 
     private List<PathNode> CalculatePath(PathNode endNode) {
