@@ -161,7 +161,7 @@ public class UnitGridCombat : MonoBehaviour
         List<PathNode> validList = pathfinding.GetValidNodes(transform.position, range);
 
         foreach (PathNode node in validList) {
-            Debug.Log(node);
+            Debug.Log(node+ ", dist: " + node.distanceCost);
             validNodes.Add(new ValidNode(node,node.distanceCost));
         }
     }

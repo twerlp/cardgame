@@ -47,21 +47,20 @@ public class Pathfinding {
         Queue<PathNode> queue = new Queue<PathNode>();
         queue.Enqueue(grid.GetGridObject(startX, startY));
 
-        for (int dist = 0; queue.Count > 0; dist++)
+        while (queue.Count > 0)
         {
             PathNode current = queue.Dequeue();
             foreach (PathNode neighbour in GetNeighbourList(current)) // Check all of current node's neighbors.
             {
-                neighbour.distanceCost = dist;
-                if (neighbour.isWalkable && neighbour.distanceCost <= range && !exploredTiles.Contains(neighbour)) {
-                        exploredTiles.Add(neighbour);
+                if (!exploredTiles.Contains(neighbour)) {
+                    neighbour.distanceCost = current.distanceCost + 1;
+                    if (neighbour.isWalkable && neighbour.distanceCost <= range) {
                         queue.Enqueue(neighbour); // Node shall be scrutinized
+                        validTiles.Add(neighbour);
+                    }
+                    exploredTiles.Add(neighbour);
                 }
-            }
-            if (current.distanceCost > 0)
-            {
-                // This node is valid!
-                validTiles.Add(current);
+
             }
         }
         return validTiles;
@@ -78,7 +77,7 @@ public class Pathfinding {
         } else {
             List<Vector3> vectorPath = new List<Vector3>();
             foreach (PathNode pathNode in path) {
-                vectorPath.Add(new Vector3(pathNode.x, pathNode.y) * grid.GetCellSize() + Vector3.one * grid.GetCellSize() * .5f);
+                vectorPath.Add(new Vector3(pathNode.x, pathNode.y) * grid.GetCellSize() + .5f * grid.GetCellSize() * Vector3.one);
             }
             return vectorPath;
         }
