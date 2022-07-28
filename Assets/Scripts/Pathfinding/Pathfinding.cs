@@ -55,7 +55,7 @@ public class Pathfinding {
                 if (!exploredTiles.Contains(neighbour)) {
                     neighbour.distanceCost = current.distanceCost + 1;
                     if (neighbour.isWalkable && neighbour.distanceCost <= range) {
-                        queue.Enqueue(neighbour); // Node shall be scrutinized
+                        queue.Enqueue(neighbour); // This node is valid, continue process
                         validTiles.Add(neighbour);
                     }
                     exploredTiles.Add(neighbour);
@@ -71,13 +71,16 @@ public class Pathfinding {
         grid.GetXY(startWorldPosition, out int startX, out int startY);
         grid.GetXY(endWorldPosition, out int endX, out int endY);
 
+        Debug.Log("Start X: " + startX + "\nStart Y: " + startY + "\nEnd X: " + endX + "\nEnd Y: " + endY);
+        ArenaHandler.Instance.UpdateActionMap(grid.GetWorldPosition(endX, endY), ArenaHandler.SelectState.Attack);
+
         List<PathNode> path = FindPath(startX, startY, endX, endY);
         if (path == null) {
             return null;
         } else {
             List<Vector3> vectorPath = new List<Vector3>();
             foreach (PathNode pathNode in path) {
-                vectorPath.Add(new Vector3(pathNode.x, pathNode.y) * grid.GetCellSize() + .5f * grid.GetCellSize() * Vector3.one);
+                vectorPath.Add(new Vector3(pathNode.x, pathNode.y) * grid.GetCellSize() + Vector3.one * grid.GetCellSize() * .5f + grid.GetOriginPosition());
             }
             return vectorPath;
         }
@@ -187,6 +190,7 @@ public class Pathfinding {
         PathNode currentNode = endNode;
         while (currentNode.cameFromNode != null) {
             path.Add(currentNode.cameFromNode);
+            ArenaHandler.Instance.UpdateActionMap(grid.GetWorldPosition(currentNode.x, currentNode.y), ArenaHandler.SelectState.Attack);
             currentNode = currentNode.cameFromNode;
         }
         path.Reverse();
@@ -216,12 +220,13 @@ public class Pathfinding {
         {
             for (int y = 0; y < grid.GetHeight(); y++)
             {
-                if (obstacleMap.HasTile(obstacleMap.WorldToCell(grid.GetWorldPosition(x,y))))
+                if (obstacleMap.HasTile(obstacleMap.WorldToCell(grid.GetWorldPosition(x, y)))) {
                     grid.GetGridObject(x,y).SetIsWalkable(false);
-                else
+                }
+                else {
                     grid.GetGridObject(x, y).SetIsWalkable(true);
+                }
             }
         }
     }
-
 }

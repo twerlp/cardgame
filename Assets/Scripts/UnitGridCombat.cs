@@ -53,18 +53,19 @@ public class UnitGridCombat : MonoBehaviour
     }
     public void MoveTo(Vector3 targetPosition, Action onReachedPosition) // Move the player
     {
+        Debug.Log("Moving to " + targetPosition);
         state = State.Moving;
         UpdatePosition();
-        movePosition.SetMovePosition(targetPosition + new Vector3(1, 1), () => {
+        movePosition.SetMovePosition(targetPosition, () => {
             state = State.Normal;
             UpdatePosition();
             onReachedPosition();
         });
-        
     }
 
     public void MoveTo(PathNode targetNode, Action onReachedPosition) 
     {
+        Debug.Log("Moving to "+targetNode);
         MoveTo(pathfinding.GetGrid().GetWorldPosition(targetNode.x, targetNode.y), onReachedPosition);
     }
 
@@ -164,6 +165,8 @@ public class UnitGridCombat : MonoBehaviour
             Debug.Log(node+ ", dist: " + node.distanceCost);
             validNodes.Add(new ValidNode(node,node.distanceCost));
         }
+        ShowNone();
+        ShowValid();
     }
 
     public void UpdatePosition() 
@@ -180,6 +183,41 @@ public class UnitGridCombat : MonoBehaviour
         {
             node.SetUnitGridCombat(this);
             node.SetIsWalkable(false);
+        }
+    }
+
+    private void ShowWalk()
+    {
+        for (int x = 0; x < pathfinding.GetGrid().GetWidth(); x++)
+        {
+            for (int y = 0; y < pathfinding.GetGrid().GetHeight(); y++)
+            {
+                if (!pathfinding.GetGrid().GetGridObject(x,y).isWalkable)
+                {
+                    ArenaHandler.Instance.UpdateActionMap(pathfinding.GetGrid().GetWorldPosition(x, y), ArenaHandler.SelectState.Attack);
+                }
+                else
+                {
+                    ArenaHandler.Instance.UpdateActionMap(pathfinding.GetGrid().GetWorldPosition(x, y), ArenaHandler.SelectState.Movement);
+                }
+            }
+        }
+    }
+
+    private void ShowValid()
+    {
+        foreach(ValidNode validNode in validNodes)
+                ArenaHandler.Instance.UpdateActionMap(pathfinding.GetGrid().GetWorldPosition(validNode.node.x, validNode.node.y), ArenaHandler.SelectState.Movement);
+    }
+
+    private void ShowNone() 
+    {
+        for (int x = 0; x < pathfinding.GetGrid().GetWidth(); x++)
+        {
+            for (int y = 0; y < pathfinding.GetGrid().GetHeight(); y++)
+            {
+                ArenaHandler.Instance.UpdateActionMap(pathfinding.GetGrid().GetWorldPosition(x, y), ArenaHandler.SelectState.Health);
+            }
         }
     }
 

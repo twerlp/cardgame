@@ -12,6 +12,12 @@ public class MovePositionPathfinding : MonoBehaviour
         this.onReachedTargetPosition = onReachedTargetPosition;
         pathVectorList = Pathfinding.Instance.FindPath(transform.position, movePosition);
 
+        Debug.Log("##########");
+        foreach (Vector3 vec in pathVectorList)
+        {
+            Debug.Log(vec);
+        }
+
         if (pathVectorList.Count > 0)
         {
             pathIndex = 0;

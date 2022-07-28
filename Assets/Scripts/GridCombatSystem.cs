@@ -20,6 +20,7 @@ public class GridCombatSystem : MonoBehaviour
     private enum State 
     { 
         Begin,
+        PlayerStart,
         PlayerTurn,
         AITurn,
         Win,
@@ -102,11 +103,9 @@ public class GridCombatSystem : MonoBehaviour
                                 // Have enough points to move there
                                 // Queue the movement
                                 Debug.Log("You can move");
-                                selectedUnit.MoveTo(node, () =>
-                                {
+                                selectedUnit.MoveTo(node, () => {
                                     Debug.Log("Reached the position");
-                                }
-                                );
+                                });
                             }
                             else {
                                 Debug.Log("Not enough points");
@@ -191,7 +190,7 @@ public class GridCombatSystem : MonoBehaviour
 
         foreach (UnitGridCombat chara in playerTeamList) {
             chara.UpdateValidity(movementPoints); 
-            Debug.Log("Player movements calculated");
+            Debug.Log(chara + ": player's movements calculated");
         }
     
     }

@@ -54,7 +54,7 @@ public class ArenaHandler : MonoBehaviour
         UpdateInteractionMap();
     }
 
-    public Grid<PathNode> GetGrid() // It's all the same ref but ¯\_(:/)_/¯ less for me to write
+    public Grid<PathNode> GetGrid()
     { 
         return grid;
     }
@@ -64,13 +64,13 @@ public class ArenaHandler : MonoBehaviour
         Vector3Int pos = tileGrid.WorldToCell(worldPosition);
         switch (selectState) {
             case SelectState.Attack:
-                interactiveMap.SetTile(pos, attackTile);
+                actionMap.SetTile(pos, attackTile);
                 break;
             case SelectState.Movement:
-                interactiveMap.SetTile(pos, moveTile);
+                actionMap.SetTile(pos, moveTile);
                 break;
             default:
-                interactiveMap.SetTile(pos, null);
+                actionMap.SetTile(pos, null);
                 break;
         }
         
