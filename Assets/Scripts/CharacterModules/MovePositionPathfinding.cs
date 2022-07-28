@@ -35,7 +35,7 @@ public class MovePositionPathfinding : MonoBehaviour
             Vector3 moveVelocity = (nextPathPosition - transform.position).normalized;
             GetComponent<MoveVelocity>().SetVelocity(moveVelocity);
 
-            float reachedPathPositionDistance = 1f;
+            float reachedPathPositionDistance = 0.51f;
             if (Vector3.Distance(transform.position, nextPathPosition) < reachedPathPositionDistance)
             {
                 pathIndex++;
@@ -43,6 +43,7 @@ public class MovePositionPathfinding : MonoBehaviour
                 {
                     // End of path
                     pathIndex = -1;
+                    transform.position = nextPathPosition; // Just set the player to be at exactly the right spot, bit of a janky fix
                     onReachedTargetPosition();
                 }
             }
